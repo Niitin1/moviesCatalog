@@ -8,7 +8,7 @@ public class HomeController {
 	
 	@GetMapping(value = "/")
 	public String getTest() {
-		return "movieCatalog";
+		return "movieCatalog1";
 	}
 	
 
