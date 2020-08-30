@@ -27,13 +27,11 @@ public class HomeController {
 		return "movieCatalog1";
 	}
 	
-	@GetMapping(value = "/getCatalog{userId}")
+	@GetMapping(value = "/getCatalog/{userId}")
 	private @ResponseBody List<HomeBean> getCatalog(@PathVariable("userId") String userId){
 		log.info("userID  "+userId);
-		HomeBean hb = new HomeBean("Transformer", "Test" , 4);
-		List<HomeBean> hbs =  new ArrayList<HomeBean>();
-		hbs.add(hb);
-		return hbs;
+		
+		return homeService.getCatalog(userId);
 	}
 	
 }
