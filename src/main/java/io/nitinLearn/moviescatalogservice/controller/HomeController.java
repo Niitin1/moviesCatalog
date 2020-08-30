@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.nitinLearn.moviescatalogservice.bean.HomeBean;
+import io.nitinLearn.moviescatalogservice.bean.Rating;
 import io.nitinLearn.moviescatalogservice.service.HomeService;
 
 @RestController
