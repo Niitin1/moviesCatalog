@@ -6,6 +6,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +18,10 @@ import io.nitinLearn.moviescatalogservice.bean.Rating;
 @Service
 public class HomeService {
 	
-	@Value("${url}")
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Value("${movieInfoUrl}")
 	String url;
 	
 	private final Logger log = Logger.getLogger(this.getClass());
@@ -26,7 +30,7 @@ public class HomeService {
 		// TODO Auto-generated method stub
 		log.info("service has been called "+userId);
 		
-		RestTemplate restTemplate = new RestTemplate();
+	//	RestTemplate restTemplate = new RestTemplate();
 		//log.info("url is "+url);
 		//Movie movie = restTemplate.getForObject("http://localhost:8082/movies-info-service", Movie.class);
 		
