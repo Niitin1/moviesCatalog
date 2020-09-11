@@ -21,8 +21,8 @@ import io.nitinLearn.moviescatalogservice.bean.UserRating;
 @Service
 public class HomeService {
 
-	@Autowired
-	RestTemplate restTemplate;
+	/*@Autowired
+	RestTemplate restTemplate;*/
 
 	@Autowired
 	private WebClient.Builder webClientBuilder;
@@ -38,6 +38,7 @@ public class HomeService {
 	public List<HomeBean> getCatalog(String userId) {
 		// TODO Auto-generated method stub
 		log.info("service has been called " + userId);
+		RestTemplate restTemplate = new RestTemplate();
 
 		
 		/*  List<Rating> ratings = new ArrayList<Rating>(); ratings.add(new
@@ -48,7 +49,7 @@ public class HomeService {
 
 		return ratings.stream().map(rating -> {
 			Movie movie = restTemplate.getForObject(url + rating.getMovieId(), Movie.class);
-
+			log.info("movie "+movie.toString());
 			// reactive programming(asynchronous programming)
 			// Movie movie =
 			// webClientBuilder.build().get().uri(url).retrieve().bodyToMono(Movie.class).block();
