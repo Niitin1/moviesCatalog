@@ -39,6 +39,7 @@ public class HomeService {
 		// TODO Auto-generated method stub
 		log.info("service has been called " + userId);
 		RestTemplate restTemplate = new RestTemplate();
+		
 
 		
 		/*  List<Rating> ratings = new ArrayList<Rating>(); ratings.add(new
