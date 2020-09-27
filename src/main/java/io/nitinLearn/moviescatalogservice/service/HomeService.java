@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import io.nitinLearn.moviescatalogservice.bean.HomeBean;
 import io.nitinLearn.moviescatalogservice.bean.Movie;
 import io.nitinLearn.moviescatalogservice.bean.Rating;

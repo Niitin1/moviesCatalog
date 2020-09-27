@@ -1,6 +1,7 @@
 package io.nitinLearn.moviescatalogservice.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.ribbon.proxy.annotation.Hystrix;
 
 import io.nitinLearn.moviescatalogservice.bean.HomeBean;
@@ -31,11 +33,17 @@ public class HomeController {
 	}
 	
 	@GetMapping(value = "/getCatalog/{userId}")
-	@Hystrix
+//	@HystrixCommand(fallbackMethod = "fallBack")
 	private @ResponseBody List<HomeBean> getCatalog(@PathVariable("userId") String userId){
 		log.info("userIDa  "+userId);
 		
 		return homeService.getCatalog(userId);
+	}
+	
+	private @ResponseBody List<HomeBean> fallBack(@PathVariable("userId") String userId){
+		log.info("userIDa fallback "+userId);
+		
+		return Arrays.asList(new HomeBean("NA" , "", 0));
 	}
 	
 }
