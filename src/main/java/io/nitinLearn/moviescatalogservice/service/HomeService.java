@@ -1,6 +1,7 @@
 package io.nitinLearn.moviescatalogservice.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -37,6 +38,8 @@ public class HomeService {
 
 	private final Logger log = Logger.getLogger(this.getClass());
 
+	
+	@HystrixCommand(fallbackMethod = "getFallBack")
 	public List<HomeBean> getCatalog(String userId) {
 		// TODO Auto-generated method stub
 		log.info("service has been called " + userId);
@@ -53,11 +56,23 @@ public class HomeService {
 		return ratings.stream().map(rating -> {
 			Movie movie = restTemplate.getForObject(url + rating.getMovieId(), Movie.class);
 			log.info("movie "+movie.toString());
+			return new HomeBean(movie.getName(), movie.getMovieId(), rating.getRating());
+			
+			
 			// reactive programming(asynchronous programming)
 			// Movie movie =
 			// webClientBuilder.build().get().uri(url).retrieve().bodyToMono(Movie.class).block();
-			return new HomeBean(movie.getName(), movie.getMovieId(), rating.getRating());
+			
 		}).collect(Collectors.toList());
+	}
+	
+	
+	public List<HomeBean> getFallBack(String userId) {
+		// TODO Auto-generated method stub
+		log.info("service has been called , fallback method " + userId);
+		return Arrays.asList(new HomeBean("no movie", "",0));
+		
+			
 	}
 
 }
