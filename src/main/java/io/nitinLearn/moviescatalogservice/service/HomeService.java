@@ -24,55 +24,49 @@ import io.nitinLearn.moviescatalogservice.bean.UserRating;
 @Service
 public class HomeService {
 
-	/*@Autowired
-	RestTemplate restTemplate;*/
+//	@Autowired
+//	RestTemplate restTemplate;
 
 	@Autowired
 	private WebClient.Builder webClientBuilder;
 
+	@Autowired
+	RatingService ratingService;
+
 	@Value("${movieInfoUrl}")
 	String url;
-	
-	@Value("${ratingInfoUrl}")
-	String ratingUrl;
 
 	private final Logger log = Logger.getLogger(this.getClass());
 
-	
-	@HystrixCommand(fallbackMethod = "getFallBack")
 	public List<HomeBean> getCatalog(String userId) {
 		// TODO Auto-generated method stub
 		log.info("service has been called " + userId);
-		RestTemplate restTemplate = new RestTemplate();
-		
 
-		
-		/*  List<Rating> ratings = new ArrayList<Rating>(); ratings.add(new
-		  Rating("1234", 4)); ratings.add(new Rating("5678", 3));*/
-		 
-		UserRating userRatings = restTemplate.getForObject(ratingUrl+userId, UserRating.class);
+		UserRating userRatings = ratingService.getUserRating(userId);
+
 		List<Rating> ratings = userRatings.getUserRating();
 
 		return ratings.stream().map(rating -> {
-			Movie movie = restTemplate.getForObject(url + rating.getMovieId(), Movie.class);
-			log.info("movie "+movie.toString());
-			return new HomeBean(movie.getName(), movie.getMovieId(), rating.getRating());
-			
-			
-			// reactive programming(asynchronous programming)
-			// Movie movie =
-			// webClientBuilder.build().get().uri(url).retrieve().bodyToMono(Movie.class).block();
-			
+			return getCatalogItem(rating);
+
 		}).collect(Collectors.toList());
 	}
-	
-	
-	public List<HomeBean> getFallBack(String userId) {
+
+	@HystrixCommand(fallbackMethod = "getFallBackCatalogItem")
+	public HomeBean getCatalogItem(Rating rating) {
+		// TODO Auto-generated method stub
+		RestTemplate restTemplate = new RestTemplate();
+		Movie movie = restTemplate.getForObject(url + rating.getMovieId(), Movie.class);
+		log.info("movie " + movie.toString());
+		return new HomeBean(movie.getName(), movie.getMovieId(), rating.getRating());
+
+	}
+
+	public List<HomeBean> getFallBackCatalogItem(String userId) {
 		// TODO Auto-generated method stub
 		log.info("service has been called , fallback method " + userId);
-		return Arrays.asList(new HomeBean("no movie", "",0));
-		
-			
+		return Arrays.asList(new HomeBean("no movie", "", 0));
+
 	}
 
 }
